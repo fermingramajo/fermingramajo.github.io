@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Fermín Gramajo — Digital Creator (Liquid Glass — Production)</title>
+<meta name="description" content="Fermín Gramajo — portfolio, motion systems, interaction design, and liquid-glass UI. Fully self-contained single-file production-ready HTML." />
+<style>
+  /* ===========================
+     GLOBAL RESET & VARIABLES
+     =========================== */
+  :root{
+    --bg-1:#06111a;
+    --bg-2:#071429;
+    --glass-1: rgba(255,255,255,0.04);
+    --glass-2: rgba(255,255,255,0.02);
+    --accent-a:#06b6d4;
+    --accent-b:#8b5cf6;
+    --accent-c:#ff7ab6;
+    --text:#eaf2ff;
+    --muted: rgba(234,242,255,0.65);
+    --radius:18px;
+    --maxw:1240px;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg-1),var(--bg-2));color:var(--text);-webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale}
+  a{color:inherit}
+  img{max-width:100%;display:block}
+
+  /* ===========================
+     LAYOUT
+     =========================== */
+  .shell{max-width:var(--maxw);margin:22px auto;padding:20px;position:relative}
+  header{position:sticky;top:14px;z-index:120;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;font-weight:800;background:linear-gradient(135deg,var(--accent-a),var(--accent-b));color:#021018}
+  .navlinks{display:flex;gap:10px;align-items:center}
+  .navlinks a{padding:8px 12px;border-radius:10px;text-decoration:none;color:var(--text);font-weight:600;transition:all .18s}
+  .navlinks a:hover{transform:translateY(-2px);opacity:.95}
+  .actions{display:flex;gap:8px;align-items:center}
+
+  /* ===========================
+     HERO / WATER-LENS
+     =========================== */
+  .hero{display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:start;margin-top:18px}
+  .lens-card{position:relative;padding:28px;border-radius:var(--radius);overflow:visible;background:linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.06);box-shadow: 0 14px 60px rgba(2,6,23,0.6);backdrop-filter: blur(16px) saturate(140%);-webkit-backdrop-filter: blur(16px) saturate(140%)}
+  .profile{display:flex;gap:18px;align-items:center}
+  .avatar{width:120px;height:120px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);display:grid;place-items:center;background:linear-gradient(135deg,var(--accent-b),var(--accent-a))}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  h1{font-size:clamp(28px,4vw,44px);margin:0}
+  .role{color:var(--muted);margin-top:6px}
+  .cta{display:flex;gap:10px;margin-top:16px}
+  .btn{position:relative;display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));cursor:pointer;font-weight:700;color:var(--text)}
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{background:linear-gradient(90deg,var(--accent-a),var(--accent-b));color:#021018;border:none;box-shadow:0 10px 30px rgba(11,18,38,0.6)}
+  .mini-note{font-size:13px;color:var(--muted);margin-top:12px}
+
+  /* WATER LENS - a movable circular refractive overlay */
+  .water-lens{position:absolute;pointer-events:none;z-index:6;border-radius:50%;width:220px;height:220px;transform:translate(-50%,-50%);mix-blend-mode:screen;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.6))}
+  .water-lens .inner{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 30%, rgba(255,255,255,0.14), rgba(255,255,255,0.03) 30%, rgba(255,255,255,0.01) 60%);backdrop-filter:blur(10px) saturate(160%);-webkit-backdrop-filter:blur(10px) saturate(160%);border:1px solid rgba(255,255,255,0.06)}
+  .water-lens .ripple{position:absolute;border-radius:50%;inset:0;box-shadow:inset 0 60px 120px rgba(255,255,255,0.02);opacity:0.6;transform:scale(1.02);background:radial-gradient(circle at 50% 40%, rgba(255,255,255,0.02), transparent 40%)}
+
+  /* SIDE STATS */
+  .side{display:flex;flex-direction:column;gap:14px}
+  .stats{display:flex;gap:10px}
+  .stat{flex:1;padding:12px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);text-align:center}
+  .stat .big{font-weight:800;font-size:18px}
+  .links-row{display:flex;gap:8px;margin-top:12px;justify-content:center}
+
+  /* ===========================
+     PROJECTS GRID (HEAVY)
+     =========================== */
+  .projects{margin-top:22px}
+  .projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:12px}
+  .project{position:relative;border-radius:14px;overflow:hidden;padding:14px;border:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));cursor:pointer;transition:transform .45s cubic-bezier(.2,.9,.2,1),box-shadow .25s}
+  .project:hover{transform:translateY(-10px);box-shadow:0 18px 60px rgba(2,6,23,0.6)}
+  .project h3{margin:0 0 8px 0}
+  .project .meta{font-size:13px;color:var(--muted)}
+  .project .cover-bg{position:absolute;inset:0;z-index:0;opacity:.06;mix-blend-mode:screen}
+  .pill{position:absolute;right:12px;top:12px;font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(0,0,0,0.12);z-index:3}
+
+  /* PROJECT MODAL */
+  .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.85));z-index:220;padding:20px}
+  .modal.open{display:flex}
+  .modal-card{width:min(1100px,96%);max-height:86vh;overflow:auto;border-radius:16px;padding:18px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.04)}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .modal-gallery{margin-top:12px;border-radius:12px;overflow:hidden;background:rgba(255,255,255,0.02);height:360px;display:grid;place-items:center;position:relative}
+  .modal-gallery img{width:100%;height:100%;object-fit:cover}
+  .modal-controls{display:flex;gap:8px;margin-top:12px}
+
+  /* CONTACT */
+  .contact-grid{display:grid;grid-template-columns:1fr 360px;gap:18px;margin-top:14px}
+  form input, form textarea{width:100%;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text);resize:vertical}
+  form label{font-size:13px;color:var(--muted);margin-bottom:6px;display:block}
+  .form-actions{display:flex;gap:8px;margin-top:8px}
+  .small-note{font-size:13px;color:var(--muted)}
+
+  /* FOOTER */
+  footer{margin-top:32px;padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);display:flex;justify-content:space-between;align-items:center;gap:12px}
+
+  /* TOAST */
+  .toast{position:fixed;right:18px;bottom:18px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);box-shadow:0 10px 30px rgba(2,6,23,0.6);display:none;z-index:260}
+  .toast.show{display:block;animation:toast-in .48s ease}
+  @keyframes toast-in{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+  /* PARTICLES (click) */
+  .particle{position:fixed;width:8px;height:8px;border-radius:50%;pointer-events:none;z-index:300;mix-blend-mode:screen}
+
+  /* RESPONSIVE */
+  @media (max-width:1000px){.hero{grid-template-columns:1fr}.projects-grid{grid-template-columns:repeat(2,1fr)}.contact-grid{grid-template-columns:1fr}.navlinks a{display:none}}
+  @media (max-width:560px){.projects-grid{grid-template-columns:1fr}.brand .logo{width:40px;height:40px}}
+</style>
+</head>
+<body>
+  <div class="shell" id="appShell">
+    <!-- STICKY HEADER -->
+    <header role="banner" aria-label="Primary header">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">FG</div>
+        <div>
+          <div style="font-weight:800">Fermín Gramajo</div>
+          <div style="font-size:12px;color:var(--muted)">Digital Creator — Los Angeles, CA</div>
+        </div>
+      </div>
+
+      <nav class="navlinks" role="navigation" aria-label="Primary navigation">
+        <a href="#hero" data-scroll>Home</a>
+        <a href="#projects" data-scroll>Work</a>
+        <a href="#contact" data-scroll>Contact</a>
+        <a href="#about" data-scroll>About</a>
+      </nav>
+
+      <div class="actions" role="toolbar" aria-label="Actions">
+        <button class="btn" id="downloadCV">Download CV</button>
+        <button class="btn primary" id="hireBtn">Hire me</button>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <main>
+      <section id="hero" class="hero" aria-labelledby="hero-title">
+        <div class="lens-card" role="region" aria-labelledby="hero-title" tabindex="0">
+          <!-- Water lens element (follows pointer) -->
+          <div class="water-lens" id="waterLens" aria-hidden="true">
+            <div class="inner"></div>
+            <div class="ripple"></div>
+          </div>
+
+          <div class="profile" style="position:relative;z-index:3">
+            <div class="avatar" aria-hidden="true">
+              <!-- If you have a real headshot, replace the src here with your real file path -->
+              <img alt="Fermín Gramajo portrait" src="https://picsum.photos/seed/fermin/800/800" />
+            </div>
+            <div style="flex:1">
+              <h1 id="hero-title">Fermín Gramajo</h1>
+              <div class="role">Design systems · Motion-first interfaces · Front-end</div>
+
+              <div class="cta" role="group" aria-label="Primary actions">
+                <button class="btn primary" id="viewWork">View work</button>
+                <button class="btn" id="contactMe">Contact</button>
+                <button class="btn" id="copyLink">Copy profile link</button>
+              </div>
+
+              <div class="mini-note">Available for freelance & full-time roles. Based in Los Angeles (PST).</div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="side" aria-labelledby="stats-title">
+          <div class="lens-card" style="padding:16px">
+            <h3 id="stats-title" style="margin:0 0 8px 0">Quick stats</h3>
+            <div style="color:var(--muted);font-size:13px;margin-bottom:8px">Selected work, collaborators and reach</div>
+            <div class="stats">
+              <div class="stat" aria-hidden="true"><div class="big">28</div><div style="font-size:13px;color:var(--muted)">Projects</div></div>
+              <div class="stat" aria-hidden="true"><div class="big">12</div><div style="font-size:13px;color:var(--muted)">Clients</div></div>
+              <div class="stat" aria-hidden="true"><div class="big">8,200</div><div style="font-size:13px;color:var(--muted)">Followers</div></div>
+            </div>
+
+            <div class="links-row" role="group" aria-label="Social links">
+              <a class="btn" href="https://twitter.com/fermingramajo" target="_blank" rel="noopener noreferrer">Twitter</a>
+              <a class="btn" href="https://dribbble.com/fermin" target="_blank" rel="noopener noreferrer">Dribbble</a>
+              <a class="btn" href="https://github.com/fermingramajo" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </div>
+          </div>
+
+          <div class="lens-card" style="padding:12px">
+            <h4 style="margin:0 0 8px 0">Availability</h4>
+            <p style="margin:0;color:var(--muted);font-size:13px">Open to projects and product partnerships. Remote-first with occasional on-site in LA.</p>
+            <div style="margin-top:12px;display:flex;gap:8px;justify-content:center">
+              <button class="btn" id="exportMessages">Export messages</button>
+              <button class="btn" id="clearData">Clear local</button>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <!-- PROJECTS -->
+      <section id="projects" class="projects" aria-labelledby="projects-title">
+        <h2 id="projects-title" style="margin:4px 0 0 4px">Selected work</h2>
+        <p style="color:var(--muted);margin-top:6px">Click any card to open a project modal with details and downloadable assets.</p>
+
+        <div class="projects-grid" role="list" aria-live="polite">
+          <!-- Each project is a real structured object in data-project attribute -->
+          <article class="project" tabindex="0" role="listitem" data-project='{"title":"Liquid Music Player","type":"UI / Motion","description":"A music player UI using fluid gels to visualise audio. Built with performant animations and accessible controls.","year":2024,"roles":["Design","Motion","Front-end"],"images":["https://picsum.photos/seed/lmusic1/1600/1000","https://picsum.photos/seed/lmusic2/1600/1000"],"live":"https://example.com/lmusic"}'>
+            <div class="cover-bg" style="background:linear-gradient(120deg, rgba(139,92,246,0.06), rgba(6,182,212,0.04));"></div>
+            <h3>Liquid Music Player</h3>
+            <div class="meta">UI / Motion — 2024</div>
+            <div class="pill">UI</div>
+          </article>
+
+          <article class="project" tabindex="0" role="listitem" data-project='{"title":"Micro-interaction System","type":"Design System","description":"Reusable interaction patterns with timing, easing and accessibility specs. Ship-ready tokens and examples.","year":2025,"roles":["Design","Documentation"],"images":["https://picsum.photos/seed/micro1/1600/1000"],"live":""}'>
+            <div class="cover-bg" style="background:linear-gradient(120deg, rgba(6,182,212,0.04), rgba(255,122,182,0.03));"></div>
+            <h3>Micro-interaction System</h3>
+            <div class="meta">Design System — 2025</div>
+            <div class="pill">System</div>
+          </article>
+
+          <article class="project" tabindex="0" role="listitem" data-project='{"title":"Onboarding Flow","type":"UX / Motion","description":"A guided onboarding flow that reduces drop-off with progressive disclosure and motion cues.","year":2024,"roles":["UX","Motion"],"images":["https://picsum.photos/seed/onboard1/1600/1000"],"live":"https://example.com/onboard"}'>
+            <div class="cover-bg" style="background:linear-gradient(120deg, rgba(255,122,182,0.04), rgba(139,92,246,0.03));"></div>
+            <h3>Onboarding Flow</h3>
+            <div class="meta">UX / Motion — 2024</div>
+            <div class="pill">Interaction</div>
+          </article>
+
+          <article class="project" tabindex="0" role="listitem" data-project='{"title":"Portfolio CMS","type":"Front-end","description":"Headless CMS-driven portfolio with performant animations and accessible markup.","year":2024,"roles":["Front-end","CMS"],"images":["https://picsum.photos/seed/cms1/1600/1000"],"live":""}'>
+            <div class="cover-bg" style="background:linear-gradient(120deg, rgba(139,92,246,0.03), rgba(6,182,212,0.02));"></div>
+            <h3>Portfolio CMS</h3>
+            <div class="meta">Front-end — 2024</div>
+            <div class="pill">Front-end</div>
+          </article>
+
+          <article class="project" tabindex="0" role="listitem" data-project='{"title":"Motion Icons Pack","type":"Motion","description":"A comprehensive set of animated icons for product UI and marketing with performance-minded implementation.","year":2025,"roles":["Motion","Asset"],"images":["https://picsum.photos/seed/micons1/1600/1000"],"live":""}'>
+            <div class="cover-bg" style="background:linear-gradient(120deg, rgba(6,182,212,0.03), rgba(255,122,182,0.02));"></div>
+            <h3>Motion Icons Pack</h3>
+            <div class="meta">Motion — 2025</div>
+            <div class="pill">Motion</div>
+          </article>
+
+          <article class="project" tabindex="0" role="listitem" data-project='{"title":"Brand Notebook","type":"Branding","description":"Tactile brand exploration combining print textures with motion identity pieces for digital channels.","year":2023,"roles":["Brand","Identity"],"images":["https://picsum.photos/seed/notebook1/1600/1000"],"live":""}'>
+            <div class="cover-bg" style="background:linear-gradient(120deg, rgba(255,122,182,0.03), rgba(139,92,246,0.02));"></div>
+            <h3>Brand Notebook</h3>
+            <div class="meta">Branding — 2023</div>
+            <div class="pill">Brand</div>
+          </article>
+        </div>
+      </section>
+
+      <!-- MODAL (REUSED FOR PROJECT DETAILS) -->
+      <div id="modal" class="modal" role="dialog" aria-hidden="true" aria-labelledby="modalTitle">
+        <div class="modal-card" role="document">
+          <div class="modal-head">
+            <div>
+              <h2 id="modalTitle">Project title</h2>
+              <div id="modalMeta" style="color:var(--muted);font-size:13px">Meta</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button class="btn" id="modalClose">Close</button>
+            </div>
+          </div>
+
+          <div class="modal-gallery" id="modalGallery" aria-live="polite">
+            <!-- images injected by JS -->
+            <div style="padding:16px;color:var(--muted)">Loading preview…</div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap">
+            <button class="btn primary" id="viewLive">View live</button>
+            <button class="btn" id="downloadAssets">Download assets</button>
+            <button class="btn" id="shareProject">Share</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACT -->
+      <section id="contact" aria-labelledby="contactTitle" style="margin-top:28px">
+        <h2 id="contactTitle">Work with me</h2>
+        <p style="color:var(--muted)">Fill the form to prepare an email (mailto fallback) and store a private copy in your browser. No external demo endpoints.</p>
+
+        <div class="contact-grid">
+          <form id="contactForm" class="lens-card" style="display:flex;flex-direction:column;gap:10px" aria-label="Contact form">
+            <label for="name">Full name</label>
+            <input id="name" name="name" required autocomplete="name" />
+
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" required autocomplete="email" />
+
+            <label for="company">Company (optional)</label>
+            <input id="company" name="company" />
+
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="6" required></textarea>
+
+            <div class="form-actions">
+              <button class="btn primary" type="submit">Send email</button>
+              <button class="btn" type="button" id="saveLocal">Save (local)</button>
+              <button class="btn" type="reset">Reset</button>
+            </div>
+
+            <div class="small-note">Working hours: Mon — Fri, 9:00 — 18:00 PST</div>
+          </form>
+
+          <aside class="lens-card" style="padding:18px">
+            <h4 style="margin:0 0 8px 0">Contact details</h4>
+            <p style="margin:0;color:var(--muted)">Email: <a href="mailto:hello@fermingramajo.com" style="color:var(--accent-a)">hello@fermingramajo.com</a><br>Location: Los Angeles, CA</p>
+
+            <div style="margin-top:12px">
+              <strong>Local data</strong>
+              <div style="font-size:13px;color:var(--muted);margin-top:6px">Messages saved to your browser are private to you. Export or clear as needed.</div>
+              <div style="display:flex;gap:8px;margin-top:10px">
+                <button class="btn" id="exportLocal">Export</button>
+                <button class="btn" id="clearLocal">Clear</button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about" style="margin-top:28px">
+        <h2>About</h2>
+        <div class="lens-card" style="padding:18px">
+          <p style="color:var(--muted)">I’m Fermín. I design product UI and motion systems that are approachable, accessible and production-ready. I focus on clear interaction models, performant front-end, and delightful micro-interactions. I ship accessible design systems and animations that scale.</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer role="contentinfo">
+      <div style="display:flex;gap:12px;align-items:center">
+        <strong>Fermín Gramajo</strong>
+        <div style="font-size:13px;color:var(--muted)">Los Angeles • Available for hire</div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:center">
+        <a href="https://linkedin.com/in/fermingramajo" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://github.com/fermingramajo" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://dribbble.com/fermin" target="_blank" rel="noopener noreferrer">Dribbble</a>
+      </div>
+
+      <div style="text-align:right;font-size:13px;color:var(--muted)">© Fermín Gramajo — <a href="https://fermingramajo.com" style="color:var(--accent-b)">fermingramajo.com</a></div>
+    </footer>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <!-- PARTICLES CONTAINER -->
+  <div id="particlesRoot" aria-hidden="true"></div>
+
+<script>
+/* ===========================
+   Utility helpers
+   =========================== */
+const $ = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+const toast = (msg, ms=3000) => {
+  const t = $('#toast');
+  if(!t) return;
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>t.classList.remove('show'), ms);
+};
+
+/* ===========================
+   Smooth scrolling for nav
+   =========================== */
+$$('[data-scroll]').forEach(a=>{
+  a.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const href = a.getAttribute('href');
+    const el = document.querySelector(href);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+    // active state
+    $$('nav a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+  });
+});
+
+/* ===========================
+   Download CV (generates text file)
+   =========================== */
+$('#downloadCV').addEventListener('click', ()=>{
+  const cvText = [
+    "Fermín Gramajo",
+    "Digital Creator — Los Angeles, CA",
+    "",
+    "Experience:",
+    "- Product UI & Motion",
+    "- Design systems",
+    "- Front-end",
+    "",
+    "Contact: hello@fermingramajo.com"
+  ].join('\\n');
+  const blob = new Blob([cvText], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='Fermin_Gramajo_CV.txt';
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  toast('CV downloaded');
+});
+
+/* ===========================
+   Hire me button -> mailto
+   =========================== */
+$('#hireBtn').addEventListener('click', ()=>{
+  const subject = encodeURIComponent('Project inquiry — hire Fermín Gramajo');
+  const body = encodeURIComponent('Hi Fermín,%0D%0A%0D%0AI would like to discuss a project.%0D%0A%0D%0ARegards,');
+  location.href = `mailto:hello@fermingramajo.com?subject=${subject}&body=${body}`;
+});
+
+/* ===========================
+   Copy profile link
+   =========================== */
+$('#copyLink').addEventListener('click', async ()=>{
+  try{
+    await navigator.clipboard.writeText(location.href);
+    toast('Profile link copied');
+  } catch(err) {
+    toast('Unable to copy — please copy manually');
+  }
+});
+
+/* ===========================
+   Water lens pointer-follow + parallax blobs
+   =========================== */
+(function(){
+  const hero = $('#hero');
+  const lens = $('#waterLens');
+  if(!hero || !lens) return;
+  const rect = hero.getBoundingClientRect();
+  let mouse = {x: rect.width/2, y: rect.height/2};
+  let pos = {x: mouse.x, y: mouse.y};
+  let scale = 1;
+  const lerp = (a,b,t) => a + (b-a) * t;
+
+  window.addEventListener('pointermove', (e)=>{
+    const r = hero.getBoundingClientRect();
+    mouse.x = e.clientX - r.left;
+    mouse.y = e.clientY - r.top;
+    scale = 1.08;
+  }, {passive:true});
+  window.addEventListener('pointerleave', ()=> scale = 0.9);
+
+  function frame(){
+    pos.x = lerp(pos.x, mouse.x, 0.12);
+    pos.y = lerp(pos.y, mouse.y, 0.12);
+    lens.style.left = (pos.x + (hero.getBoundingClientRect().left)) + 'px';
+    lens.style.top = (pos.y + (hero.getBoundingClientRect().top)) + 'px';
+    lens.style.transform = `translate(-50%,-50%) scale(${scale})`;
+    scale = lerp(scale, 1, 0.06);
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* ===========================
+   Project modal logic + slider + particle burst
+   =========================== */
+(function(){
+  const modal = $('#modal');
+  const modalTitle = $('#modalTitle');
+  const modalMeta = $('#modalMeta');
+  const modalGallery = $('#modalGallery');
+  const closeBtn = $('#modalClose');
+  let currentProject = null;
+  let currentImages = [];
+  let idx = 0;
+
+  function renderGallery(){
+    modalGallery.innerHTML = '';
+    if(!currentImages || currentImages.length === 0){
+      const no = document.createElement('div');
+      no.style.padding = '20px';
+      no.style.color = 'var(--muted)';
+      no.textContent = 'No preview available';
+      modalGallery.appendChild(no);
+      return;
+    }
+    const img = document.createElement('img');
+    img.src = currentImages[idx];
+    img.alt = currentProject?.title || 'project image';
+    modalGallery.appendChild(img);
+  }
+
+  function openModal(data, ev){
+    currentProject = data;
+    currentImages = data.images || [];
+    idx = 0;
+    modalTitle.textContent = data.title || 'Untitled';
+    modalMeta.textContent = `${data.type || ''} — ${data.year || ''} • Roles: ${data.roles ? data.roles.join(', ') : ''}`;
+    renderGallery();
+    modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
+    // focus first interactive element
+    setTimeout(()=>$('#modalClose').focus(), 80);
+    // particle burst at click point
+    if(ev && ev.clientX && ev.clientY) createBurst(ev.clientX, ev.clientY);
+  }
+
+  function closeModal(){
+    modal.classList.remove('open'); modal.setAttribute('aria-hidden','true');
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e=>{ if(e.key === 'Escape') closeModal(); });
+
+  // project card click handlers
+  $$('.project').forEach(p=>{
+    p.addEventListener('click', (ev)=>{
+      try{
+        const data = JSON.parse(p.getAttribute('data-project'));
+        openModal(data, ev);
+      } catch(err){ console.error('project parse error', err); toast('Project data error'); }
+    });
+    p.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); p.click(); } });
+  });
+
+  // controls (view live, download, share)
+  $('#viewLive').addEventListener('click', ()=>{
+    const p = currentProject || {};
+    if(p.live){ window.open(p.live, '_blank', 'noopener'); }
+    else toast('No live URL for this project');
+  });
+
+  $('#downloadAssets').addEventListener('click', ()=>{
+    const data = {title: currentProject?.title || 'project', downloadedAt: new Date().toISOString()};
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = (currentProject?.title || 'project').replace(/\s+/g,'_') + '_assets.json';
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    toast('Assets downloaded');
+  });
+
+  $('#shareProject').addEventListener('click', async ()=>{
+    const title = currentProject?.title || 'Project';
+    const url = location.href;
+    if(navigator.share){
+      try{ await navigator.share({title, text: currentProject?.description || '', url}); toast('Shared'); }
+      catch(err){ toast('Share cancelled'); }
+    } else {
+      try{ await navigator.clipboard.writeText(`${title} — ${url}`); toast('Project link copied'); }
+      catch(e){ toast('Unable to copy link'); }
+    }
+  });
+
+  // keyboard arrows to navigate gallery
+  document.addEventListener('keydown', (e)=>{
+    if(!modal.classList.contains('open')) return;
+    if(e.key === 'ArrowRight'){
+      idx = (idx + 1) % Math.max(1, currentImages.length);
+      renderGallery();
+    } else if(e.key === 'ArrowLeft'){
+      idx = (idx - 1 + Math.max(1, currentImages.length)) % Math.max(1, currentImages.length);
+      renderGallery();
+    }
+  });
+
+  // create a small burst of colorful particles (visual flourish)
+  function createBurst(x,y){
+    const root = document.getElementById('particlesRoot');
+    for(let i=0;i<18;i++){
+      const el = document.createElement('div');
+      el.className = 'particle';
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      const size = 6 + Math.random()*10;
+      el.style.width = el.style.height = size + 'px';
+      el.style.background = `linear-gradient(90deg, ${randomAccent()}, ${randomAccent()})`;
+      document.body.appendChild(el);
+      const angle = Math.random() * Math.PI*2;
+      const dist = 40 + Math.random()*120;
+      const vx = Math.cos(angle) * dist;
+      const vy = Math.sin(angle) * dist;
+      el.animate([
+        { transform: 'translate(0,0) scale(1)', opacity:1 },
+        { transform: `translate(${vx}px, ${vy}px) scale(.2)`, opacity:0 }
+      ], { duration: 600 + Math.random()*400, easing: 'cubic-bezier(.2,.9,.2,1)' })
+      .onfinish = () => el.remove();
+    }
+  }
+
+  function randomAccent(){
+    const opts = ['#8b5cf6','#06b6d4','#ff7ab6','#ffd36b','#60a5fa'];
+    return opts[Math.floor(Math.random()*opts.length)];
+  }
+})();
+
+/* ===========================
+   Contact form: save local + mailto
+   =========================== */
+(function(){
+  const form = $('#contactForm');
+  if(!form) return;
+  form.addEventListener('submit', e=>{
+    e.preventDefault();
+    const name = $('#name').value.trim();
+    const email = $('#email').value.trim();
+    const company = $('#company').value.trim();
+    const message = $('#message').value.trim();
+    if(!name || !email || !message){ toast('Please fill required fields'); return; }
+
+    // save locally
+    const record = {name,email,company,message,createdAt:new Date().toISOString()};
+    const saved = JSON.parse(localStorage.getItem('fg_messages') || '[]');
+    saved.push(record); localStorage.setItem('fg_messages', JSON.stringify(saved));
+
+    // prepare mailto
+    const subject = encodeURIComponent(`Project inquiry from ${name}`);
+    const body = encodeURIComponent(`${message}\n\nName: ${name}\nEmail: ${email}\nCompany: ${company}`);
+    location.href = `mailto:hello@fermingramajo.com?subject=${subject}&body=${body}`;
+    toast('Email prepared — your mail client should open');
+  });
+
+  // save button
+  $('#saveLocal').addEventListener('click', ()=>{
+    const name = $('#name').value.trim();
+    const email = $('#email').value.trim();
+    const company = $('#company').value.trim();
+    const message = $('#message').value.trim();
+    if(!name || !email || !message){ toast('Please complete required fields before saving'); return; }
+    const saved = JSON.parse(localStorage.getItem('fg_messages') || '[]');
+    saved.push({name,email,company,message,createdAt:new Date().toISOString()});
+    localStorage.setItem('fg_messages', JSON.stringify(saved));
+    toast('Saved locally');
+  });
+
+  // export and clear
+  $('#exportLocal').addEventListener('click', ()=>{
+    const saved = JSON.parse(localStorage.getItem('fg_messages') || '[]');
+    if(!saved.length){ toast('No saved messages'); return; }
+    const blob = new Blob([JSON.stringify(saved, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'fermin_messages.json';
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    toast('Messages exported');
+  });
+
+  $('#clearLocal').addEventListener('click', ()=>{
+    if(!confirm('Clear saved messages and metrics?')) return;
+    localStorage.removeItem('fg_messages'); localStorage.removeItem('fg_metrics');
+    toast('Local data cleared');
+  });
+
+  // backup export from hero side
+  $('#exportMessages')?.addEventListener('click', ()=>$('#exportLocal').click());
+  $('#clearData')?.addEventListener('click', ()=>$('#clearLocal').click());
+})();
+
+/* ===========================
+   Simple local analytics (privacy-first)
+   =========================== */
+(function(){
+  const bump = (k) => {
+    const m = JSON.parse(localStorage.getItem('fg_metrics') || '{}');
+    m[k] = (m[k] || 0) + 1;
+    localStorage.setItem('fg_metrics', JSON.stringify(m));
+  };
+  $('#viewWork').addEventListener('click', ()=>{
+    document.getElementById('projects').scrollIntoView({behavior:'smooth'});
+    bump('view_work');
+  });
+  $('#contactMe').addEventListener('click', ()=>{
+    document.getElementById('contact').scrollIntoView({behavior:'smooth'});
+    bump('contact_open');
+  });
+})();
+
+/* ===========================
+   Tiny UX polish: entrance animations for projects
+   =========================== */
+(function(){
+  const items = $$('.project');
+  items.forEach((p,i)=>{
+    p.style.opacity = 0;
+    p.style.transform = 'translateY(10px)';
+    setTimeout(()=>{
+      p.style.transition = 'all .6s cubic-bezier(.2,.9,.2,1)';
+      p.style.opacity = 1; p.style.transform = 'translateY(0)';
+    }, 120 * i);
+  });
+})();
+
+/* ===========================
+   Preload images
+   =========================== */
+(function(){ $$('img').forEach(img=>{ const i = new Image(); i.src = img.src; }); })();
+
+/* ===========================
+   Safe init mark
+   =========================== */
+document.documentElement.classList.add('js-ready');
+</script>
+</body>
+</html>
