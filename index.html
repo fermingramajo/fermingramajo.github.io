@@ -210,11 +210,11 @@
 
         <div class="projects-grid" role="list" aria-live="polite">
           <!-- Each project is a real structured object in data-project attribute -->
-          <article class="project" tabindex="0" role="listitem" data-project='{"title":"Liquid Music Player","type":"UI / Motion","description":"A music player UI using fluid gels to visualise audio. Built with performant animations and accessible controls.","year":2024,"roles":["Design","Motion","Front-end"],"images":["/7823867644.png","https://picsum.photos/seed/lmusic2/1600/1000"],"live":"https://example.com/lmusic"}'>
+          <article class="project" tabindex="0" role="listitem" data-project='{"title":"Liquid Music Player","type":"Liquid Glass / Web App","description":"A music player with high UI using fluid liquid glass to visualise styles Built with performant animations and accessible controls.","year":2020,"roles":["Design","Web","Self-storage"],"images":["/7828893222.png","/7828893222.png"],"live":"player.dscd.one"}'>
             <div class="cover-bg" style="background:linear-gradient(120deg, rgba(139,92,246,0.06), rgba(6,182,212,0.04));"></div>
-            <h3>Liquid Music Player</h3>
-            <div class="meta">UI / Motion — 2020</div>
-            <div class="pill">UI</div>
+            <h3>Music Player (Liquid Glass)</h3>
+            <div class="meta">Liquid Glass / Web App — 2020</div>
+            <div class="pill">Web App</div>
           </article>
 
           <article class="project" tabindex="0" role="listitem" data-project='{"title":"Micro-interaction System","type":"Design System","description":"Reusable interaction patterns with timing, easing and accessibility specs. Ship-ready tokens and examples.","year":2025,"roles":["Design","Documentation"],"images":["https://picsum.photos/seed/micro1/1600/1000"],"live":""}'>
@@ -310,7 +310,7 @@
 
           <aside class="lens-card" style="padding:18px">
             <h4 style="margin:0 0 8px 0">Contact details</h4>
-            <p style="margin:0;color:var(--muted)">Email: <a href="mailto:hello@fermingramajo.com" style="color:var(--accent-a)">hello@fermingramajo.com</a><br>Location: Los Angeles, CA</p>
+            <p style="margin:0;color:var(--muted)">Email: <a href="mailto:mail@fermingramajo.com" style="color:var(--accent-a)">hello@fermingramajo.com</a><br>Location: Los Angeles, CA</p>
 
             <div style="margin-top:12px">
               <strong>Local data</strong>
@@ -328,7 +328,7 @@
       <section id="about" style="margin-top:28px">
         <h2>About</h2>
         <div class="lens-card" style="padding:18px">
-          <p style="color:var(--muted)">I’m Fermín. I design product UI and motion systems that are approachable, accessible and production-ready. I focus on clear interaction models, performant front-end, and delightful micro-interactions. I ship accessible design systems and animations that scale.</p>
+          <p style="color:var(--muted)">I’m Fermín. I design websites and build small systems that are approachable, accessible and production-ready. I focus on clear interaction models like Willfy, self-hired, and delightful content creator. I ship accessible design systems and animations that make sense.</p>
         </div>
       </section>
     </main>
@@ -343,7 +343,7 @@
       <div style="display:flex;gap:12px;align-items:center">
         <a href="https://linkedin.com/in/fermingramajo" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         <a href="https://github.com/fermingramajo" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="https://dribbble.com/fermin" target="_blank" rel="noopener noreferrer">Dribbble</a>
+        <a href="https://dribbble.com/fermingramajo" target="_blank" rel="noopener noreferrer">Dribbble</a>
       </div>
 
       <div style="text-align:right;font-size:13px;color:var(--muted)">© Fermín Gramajo — <a href="https://fermingramajo.com" style="color:var(--accent-b)">fermingramajo.com</a></div>
@@ -394,11 +394,11 @@ $('#downloadCV').addEventListener('click', ()=>{
     "Digital Creator — Los Angeles, CA",
     "",
     "Experience:",
-    "- Product UI & Motion",
-    "- Design systems",
-    "- Front-end",
+    "- Digital Creator",
+    "- Design website/systems",
+    "- AI Management",
     "",
-    "Contact: hello@fermingramajo.com"
+    "Contact: mail@fermingramajo.com"
   ].join('\\n');
   const blob = new Blob([cvText], {type:'text/plain'});
   const url = URL.createObjectURL(blob);
@@ -411,9 +411,9 @@ $('#downloadCV').addEventListener('click', ()=>{
    Hire me button -> mailto
    =========================== */
 $('#hireBtn').addEventListener('click', ()=>{
-  const subject = encodeURIComponent('Project inquiry — hire Fermín Gramajo');
-  const body = encodeURIComponent('Hi Fermín,%0D%0A%0D%0AI would like to discuss a project.%0D%0A%0D%0ARegards,');
-  location.href = `mailto:hello@fermingramajo.com?subject=${subject}&body=${body}`;
+  const subject = encodeURIComponent('Project Inquiry');
+  const body = encodeURIComponent('Hi Fermín, I would like to discuss a project: (Your Own Words/Comment). Best regards,');
+  location.href = `mailto:mail@fermingramajo.com?subject=${subject}&body=${body}`;
 });
 
 /* ===========================
@@ -615,8 +615,8 @@ $('#copyLink').addEventListener('click', async ()=>{
     // prepare mailto
     const subject = encodeURIComponent(`Project inquiry from ${name}`);
     const body = encodeURIComponent(`${message}\n\nName: ${name}\nEmail: ${email}\nCompany: ${company}`);
-    location.href = `mailto:hello@fermingramajo.com?subject=${subject}&body=${body}`;
-    toast('Email prepared — your mail client should open');
+    location.href = `mailto:mail@fermingramajo.com?subject=${subject}&body=${body}`;
+    toast('Email prepared - if Email app is not opened, use a phone device.');
   });
 
   // save button
